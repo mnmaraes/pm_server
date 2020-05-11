@@ -1,6 +1,14 @@
 import "reflect-metadata";
 import { Server } from "jayson";
 
-const server = new Server({});
+import { createConnection } from "typeorm";
 
-server.http().listen(3002);
+import * as methods from "methods";
+
+const server = new Server({
+  ...methods,
+});
+
+createConnection().then(() => {
+  server.http().listen(3002);
+});

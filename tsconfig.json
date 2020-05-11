@@ -13,7 +13,13 @@
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "baseUrl": "src",
+    "paths": {
+      "methods/*": ["methods/*"],
+      "entity/*": ["entity/*"],
+      "tests/*": ["tests/*"]
+    }
   },
   "exclude": ["jest.config.js", "prettierrc.js", "node_modules", "build"]
 }
