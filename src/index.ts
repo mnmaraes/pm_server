@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { Server } from "jayson";
 
 const server = new Server({});
