@@ -21,5 +21,12 @@
       "tests/*": ["tests/*"]
     }
   },
-  "exclude": ["jest.config.js", "prettierrc.js", "node_modules", "build"]
+  "exclude": [
+    "jest.config.js",
+    "prettierrc.js",
+    "ormconfig.ts",
+    "node_modules",
+    "build",
+    "coverage"
+  ]
 }
