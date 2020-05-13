@@ -6,8 +6,8 @@ const isTest = env.NODE_ENV === "test";
 module.exports = {
   name: "default",
   type: "postgres",
-  host: "localhost",
-  port: 5432,
+  host: env.POSTGRES_HOST || "localhost",
+  port: env.POSTGRES_PORT || 5432,
   username: env.DB_USER,
   password: env.DB_PASSWORD,
   database: isTest ? env.TEST_DB_NAME : env.DB_NAME,
