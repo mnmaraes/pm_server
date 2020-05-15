@@ -1,4 +1,4 @@
-import { create, update } from "methods/index";
+import { create, update, retrieve } from "methods/index";
 
 import { noteBuilder, setupDb, teardownDb } from "tests/utils";
 
@@ -16,8 +16,8 @@ describe("note crud methods", () => {
   test("should properly create notes", async () => {
     const noteData = noteBuilder();
     let noteId = "";
-    const cb = jest.fn().mockImplementationOnce((_, serialized) => {
-      noteId = serialized.id;
+    const cb = jest.fn().mockImplementationOnce((_, { created }) => {
+      noteId = created.id;
     });
     await create([{ ...noteData }], cb);
 
@@ -35,6 +35,36 @@ describe("note crud methods", () => {
     );
 
     await Note.remove(noteId);
+  });
+
+  test("should retrieve our created notes", async () => {
+    const ids = [
+      (await Note.create(noteBuilder()).commit()).id,
+      (await Note.create(noteBuilder()).commit()).id,
+      (await Note.create(noteBuilder()).commit()).id,
+      (await Note.create(noteBuilder()).commit()).id,
+      (await Note.create(noteBuilder()).commit()).id,
+    ];
+
+    const cb = jest.fn();
+    await retrieve([], cb);
+
+    expect(cb).toHaveBeenCalledTimes(1);
+    expect(cb).toHaveBeenCalledWith(
+      null,
+      expect.objectContaining({
+        retrieved: expect.arrayContaining(
+          ids.map((id) =>
+            expect.objectContaining({
+              id,
+              body: expect.any(String),
+            })
+          )
+        ),
+      })
+    );
+
+    await Note.remove(ids);
   });
 
   test("should properly update a given note", async () => {

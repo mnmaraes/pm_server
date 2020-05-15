@@ -20,7 +20,9 @@ export const create = async (
 };
 
 type UpdateArgs = [NoteId, string];
+
 type UpdateCallback = ResponseCallback<{ updated: SerialNote }>;
+
 export const update = async (
   [id, body]: UpdateArgs,
   cb: UpdateCallback
@@ -31,6 +33,25 @@ export const update = async (
     note.commit();
 
     cb(null, { updated: await note.serialize() });
+  } catch (error) {
+    cb(error, null);
+  }
+};
+
+type RetrieveArgs = [];
+
+type RetrieveCallback = ResponseCallback<{ retrieved: SerialNote[] }>;
+
+export const retrieve = async (
+  []: RetrieveArgs,
+  cb: RetrieveCallback
+): Promise<void> => {
+  try {
+    cb(null, {
+      retrieved: await Promise.all(
+        (await Note.retrieve()).map((note) => note.serialize())
+      ),
+    });
   } catch (error) {
     cb(error, null);
   }

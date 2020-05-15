@@ -51,6 +51,10 @@ export class Note {
     return note;
   }
 
+  static async retrieve(): Promise<Note[]> {
+    return Note.repo.find();
+  }
+
   static async get(id: NoteId): Promise<Note> {
     const note = await Note.repo.findOne(id);
 
@@ -61,8 +65,8 @@ export class Note {
     return note;
   }
 
-  static async remove(id: NoteId): Promise<void> {
-    await Note.repo.remove(await Note.get(id));
+  static async remove(idOrIds: NoteId | NoteId[]): Promise<void> {
+    await Note.repo.delete(idOrIds);
   }
 
   // Utility Functions
@@ -71,7 +75,7 @@ export class Note {
   }
 
   async delete(): Promise<void> {
-    await Note.remove(this.id);
+    return Note.remove(this.id);
   }
 
   async serialize(): Promise<SerialNote> {
