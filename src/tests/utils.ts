@@ -3,16 +3,29 @@ import "reflect-metadata";
 import { build, fake } from "@jackfranklin/test-data-bot";
 import { createConnection, getConnection } from "typeorm";
 
+import { CreateParams as NoteCreateParams } from "entity/Note";
+
 let dbState: "never" | "loading" | "loaded" = "never";
 const listeners: (() => void)[] = [];
 let connCount = 0;
 
-type ProjectBuilderParams = { name: string; description: string };
-
-export const projectBuilder = build<ProjectBuilderParams>("Project", {
+export const noteBuilder = build<NoteCreateParams>("Note", {
   fields: {
-    name: fake((f) => f.lorem.words()),
-    description: fake((f) => f.lorem.paragraphs()),
+    body: fake(
+      (f) => `
+# ${f.lorem.sentence()}
+
+${f.lorem.paragraph()}
+
+- ${f.lorem.sentence()}
+- ${f.lorem.sentence()}
+- ${f.lorem.sentence()}
+
+## ${f.lorem.sentence()}
+
+${f.lorem.paragraphs()}
+      `
+    ),
   },
 });
 
